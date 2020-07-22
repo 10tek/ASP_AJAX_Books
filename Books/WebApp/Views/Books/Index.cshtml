@@ -1,0 +1,60 @@
+﻿@model IEnumerable<WebApp.Models.Book>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div>
+    <form asp-controller="Books" asp-action="Create" data-ajax-complete="onComplete" data-ajax-failure="onFailed"
+          data-ajax="true" data-ajax-method="POST">
+        <p>Title</p>
+        <input class="form-control-sm " id="title" type="text" name="Title" value="" />
+        <p>Author</p>   
+        <input class="form-control-sm " id="author" type="text" name="Author" value="" />
+        <p>Price</p>
+        <input class="form-control-sm " id="price" type="text" name="Price" value="" />
+        <button type="submit" class="btn btn-sm btn-outline-success mb-1" id="createBtn" name="Create" value="Добавить книгу">Add book</button>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Author)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="booksList">
+        </tbody>
+    </table>
+</div>
+
+
+@section scripts
+{
+    <script>
+
+        onFailed = () => {
+            alert("ERROR");
+        }
+
+        onComplete = () => {
+            $.ajax({
+                type: "GET",
+                url: "/Books/ShowBooks",
+                success: function (res) {
+                    document.querySelector("#booksList").innerHTML = res;
+                }
+            });
+        }
+        onComplete();
+
+    </script>
+}
